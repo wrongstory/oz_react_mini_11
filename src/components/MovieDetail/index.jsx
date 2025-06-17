@@ -14,23 +14,19 @@ export default function MovieDetail() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <MovieBackdrop backdrop={backdrop} title={movie.title} />
-
       <div className="max-w-6xl mx-auto py-10 px-4 md:flex gap-10">
         <MoviePoster poster={poster} title={movie.title} />
-
         <div className="flex-1 space-y-4">
           {movie.tagline && (
             <p className="text-yellow-400 text-xl font-medium italic">
               "{movie.tagline}"
             </p>
           )}
-
           <MovieMeta
             vote={movie.vote_average}
             runtime={movie.runtime}
             revenue={movie.revenue}
           />
-
           <MovieGenres genres={movie.genres} />
           <MovieOverview overview={movie.overview} />
           <MovieCompanies companies={movie.production_companies} />

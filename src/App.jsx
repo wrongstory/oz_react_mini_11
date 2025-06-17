@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/Mainpage";
-import Layout from "./components/Layout";
+import Layout from "./components/Nav/Layout";
 import MovieDetail from "./components/MovieDetail";
 
 export default function App() {
