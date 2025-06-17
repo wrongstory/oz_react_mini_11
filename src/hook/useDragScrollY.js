@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 
 export default function useDragScrollY() {
   const ref = useRef(null);
@@ -25,11 +25,6 @@ export default function useDragScrollY() {
   };
 
   const endDrag = () => setIsDragging(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-  }, [isDragging, startY, scrollTop]);
 
   return {
     ref,

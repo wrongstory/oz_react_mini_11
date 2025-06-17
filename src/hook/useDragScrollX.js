@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 
 export default function useDragScrollX() {
   const ref = useRef(null);
@@ -31,11 +31,6 @@ export default function useDragScrollX() {
   const endDrag = () => {
     setIsDragging(false);
   };
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-  }, [isDragging, startX, scrollLeft]);
 
   return {
     ref,
