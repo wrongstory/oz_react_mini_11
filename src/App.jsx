@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import MovieDetail from "./components/MovieDetail";
 import MainPage from "./pages/Mainpage";
 import Layout from "./components/Layout";
+import MovieDetail from "./components/MovieDetail";
 
 export default function App() {
   return (

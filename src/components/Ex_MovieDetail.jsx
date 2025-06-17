@@ -1,6 +1,6 @@
 import movie from "../assets/dumdata/movieDetailData.json";
 
-export default function MovieDetail() {
+export default function Ex_MovieDetail() {
   const imageBase = "https://image.tmdb.org/t/p/original";
 
   const backdrop = `${imageBase}${movie.backdrop_path}`;
