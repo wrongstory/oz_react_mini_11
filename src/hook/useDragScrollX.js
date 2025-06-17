@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 
-export default function useDragScroll() {
+export default function useDragScrollX() {
   const ref = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);

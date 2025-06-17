@@ -2,9 +2,9 @@ import { useRef, useEffect, useState } from "react";
 import movieList from "../assets/dumdata/movieListData.json";
 import MovieCard from "./MovieCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import useDragScroll from "../hook/useDragScroll";
+import useDragScrollX from "../hook/useDragScrollX";
 
-export default function MovieSlider() {
+export default function Ex_MovieSlider() {
   const containerRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(200); // 카드 한 장 기준 너비
   const [visibleCount, setVisibleCount] = useState(4); // 한 번에 보이는 카드 수
@@ -20,7 +20,7 @@ export default function MovieSlider() {
     onMouseMove,
     onMouseUp,
     onMouseLeave,
-  } = useDragScroll();
+  } = useDragScrollX();
 
   const scrollRef = useRef(null); // 버튼 클릭용
 
