@@ -12,6 +12,7 @@ export default function MovieCard({ title, rating, poster }) {
         src={`https://image.tmdb.org/t/p/w500${poster}`}
         alt={title}
         className="w-full h-80 object-cover"
+        draggable={false} // feat #8. 슬라이더 드래그 문제 해결
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold">{title}</h3>

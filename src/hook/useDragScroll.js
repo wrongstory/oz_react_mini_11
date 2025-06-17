@@ -13,7 +13,15 @@ export default function useDragScroll() {
   };
 
   const onMouseMove = (e) => {
-    if (!isDragging) return;
+    if (!isDragging || !ref.current) return;
+
+    // 애니메이션 프레임으로 부드럽게
+    requestAnimationFrame(() => {
+      const x = e.pageX - ref.current.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      ref.current.scrollLeft = scrollLeft - walk;
+    });
+
     e.preventDefault();
     const x = e.pageX - ref.current.offsetLeft;
     const walk = (x - startX) * 1.5;

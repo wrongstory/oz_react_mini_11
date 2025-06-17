@@ -33,11 +33,10 @@ export default function MovieSlider() {
   useEffect(() => {
     // 초기화 및 resize 이벤트 반응
     const handleResize = () => {
-      const container = containerRef.current;
-      if (container) {
-        const containerWidth = container.offsetWidth;
-        const calculatedCount = Math.floor(containerWidth / cardWidth);
-        setVisibleCount(calculatedCount);
+      const width = containerRef.current?.offsetWidth;
+      if (width) {
+        const count = Math.floor(width / cardWidth);
+        setVisibleCount(count);
       }
     };
 
