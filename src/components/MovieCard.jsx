@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 export default function MovieCard({ title, rating, poster }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="w-60 bg-white rounded-lg shadow-md overflow-hidden m-4 hover:scale-105 transition-transform">
+    <div
+      onClick={() => navigate("/details")}
+      className="w-60 bg-white rounded-lg shadow-md overflow-hidden m-4 hover:scale-105 transition-transform"
+    >
       <img
         src={`https://image.tmdb.org/t/p/w500${poster}`}
         alt={title}

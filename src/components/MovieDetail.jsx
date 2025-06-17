@@ -1,5 +1,3 @@
-// src/components/MovieDetail.jsx
-import React, { useState } from "react";
 import movie from "../assets/dumdata/movieDetailData.json";
 
 export default function MovieDetail() {
