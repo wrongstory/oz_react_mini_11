@@ -14,7 +14,7 @@ export default function MovieCard({ title, rating, poster }) {
         className="w-full h-80 object-cover"
       />
       <div className="p-4">
-        <h3 className="text-lg font-semibold truncate">{title}</h3>
+        <h3 className="text-lg font-semibold">{title}</h3>
         <p className="text-sm text-gray-600 mt-1">
           ⭐ 평점: {rating.toFixed(1)}
         </p>
