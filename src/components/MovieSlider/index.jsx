@@ -6,6 +6,7 @@ import ControlButtons from "./ControlButtons";
 
 export default function MovieSlider() {
   const containerRef = useRef(null);
+
   const [visibleCount, setVisibleCount] = useState(4);
   const cardWidth = 200;
 

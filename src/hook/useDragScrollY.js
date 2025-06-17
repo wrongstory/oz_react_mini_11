@@ -29,20 +29,6 @@ export default function useDragScrollY() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    // 모바일 터치 대응
-    const onTouchStart = (e) => onMouseDown(e.touches[0]);
-    const onTouchMove = (e) => onMouseMove(e.touches[0]);
-
-    el.addEventListener("touchstart", onTouchStart);
-    el.addEventListener("touchmove", onTouchMove);
-    el.addEventListener("touchend", endDrag);
-
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", endDrag);
-    };
   }, [isDragging, startY, scrollTop]);
 
   return {
