@@ -1,4 +1,3 @@
-// pages/MainPage.jsx
 import { useState } from "react";
 import MovieCard from "../components/MovieCard";
 import movieList from "../assets/dumdata/movieListData.json";
@@ -8,9 +7,7 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <h1 className="text-3xl font-bold text-center mb-8">
-        🎬 최신 영화 리스트
-      </h1>
+      <h1 className="text-3xl font-bold text-center mb-8">영화 리스트</h1>
       <div className="flex flex-wrap justify-center">
         {movies.map((movie) => (
           <MovieCard
