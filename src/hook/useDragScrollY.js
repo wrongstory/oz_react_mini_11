@@ -4,12 +4,10 @@ export default function useDragScrollY() {
   const ref = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
-  const [scrollTop, setScrollTop] = useState(0);
 
   const onMouseDown = (e) => {
     setIsDragging(true);
     setStartY(e.pageY - ref.current.offsetTop);
-    setScrollTop(ref.current.scrollTop);
   };
 
   const onMouseMove = (e) => {
