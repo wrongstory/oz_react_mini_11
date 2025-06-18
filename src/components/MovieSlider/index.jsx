@@ -1,14 +1,15 @@
 import { useRef, useEffect, useState } from "react";
-import movieList from "../../assets/dumdata/movieListData.json";
 import useDragScrollX from "../../hook/useDragScrollX";
 import Track from "./Track";
 import ControlButtons from "./ControlButtons";
+import useMovieList from "../../hook/useMovieList";
 
 export default function MovieSlider() {
   const containerRef = useRef(null);
-
-  const [visibleCount, setVisibleCount] = useState(4);
   const cardWidth = 200;
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  const { movies, loading } = useMovieList();
 
   const {
     ref: dragRef,
@@ -18,10 +19,6 @@ export default function MovieSlider() {
     onMouseUp,
     onMouseLeave,
   } = useDragScrollX();
-
-  const sortedMovies = [...movieList.results].sort(
-    (a, b) => b.vote_average - a.vote_average
-  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,6 +33,10 @@ export default function MovieSlider() {
   const scrollBy = (offset) =>
     containerRef.current?.scrollBy({ left: offset, behavior: "smooth" });
 
+  if (loading) {
+    return <p className="text-center text-gray-600">영화 불러오는 중...</p>;
+  }
+
   return (
     <div className="relative w-full px-6">
       <h2 className="text-xl font-bold mb-3 text-black">평점 높은 영화</h2>
@@ -44,7 +45,7 @@ export default function MovieSlider() {
         onRight={() => scrollBy(cardWidth * visibleCount)}
       />
       <Track
-        movies={sortedMovies}
+        movies={movies}
         refs={{ dragRef, containerRef }}
         dragHandlers={{
           isDragging,

@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-export default function MovieCard({ title, rating, poster }) {
+export default function MovieCard({ id, title, rating, poster }) {
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate("/details")}
+      onClick={() => navigate(`/details/${id}`, { replace: false })}
       className="w-60 bg-white rounded-lg shadow-md overflow-hidden m-4 hover:scale-105 transition-transform"
     >
       <img

@@ -1,12 +1,14 @@
-import movie from "../../assets/dumdata/movieDetailData.json";
 import MovieBackdrop from "./MovieBackdrop";
 import MoviePoster from "./MoviePoster";
 import MovieMeta from "./MovieMeta";
 import MovieGenres from "./MovieGenres";
 import MovieOverview from "./MovieOverview";
 import MovieCompanies from "./MovieCompanies";
+import { useSelector } from "react-redux";
 
 export default function MovieDetail() {
+  const movie = useSelector((state) => state.movie.selectedMovie);
+
   const imageBase = "https://image.tmdb.org/t/p/original";
   const backdrop = `${imageBase}${movie.backdrop_path}`;
   const poster = `${imageBase}${movie.poster_path}`;
@@ -29,7 +31,10 @@ export default function MovieDetail() {
           />
           <MovieGenres genres={movie.genres} />
           <MovieOverview overview={movie.overview} />
-          <MovieCompanies companies={movie.production_companies} />
+          <MovieCompanies
+            imageBase={imageBase}
+            companies={movie.production_companies}
+          />
         </div>
       </div>
     </div>

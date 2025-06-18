@@ -1,6 +1,4 @@
-const imageBase = "https://image.tmdb.org/t/p/original";
-
-export default function MovieCompanies({ companies }) {
+export default function MovieCompanies({ companies, imageBase }) {
   if (!companies || companies.length === 0) return null;
 
   return (

@@ -6,11 +6,6 @@ export default function NavBar() {
       <Link to="/" className="text-xl font-bold hover:text-yellow-400">
         🎬 L's Movie
       </Link>
-      <div className="space-x-4 text-sm">
-        <Link to="/details" className="hover:text-yellow-400">
-          Details
-        </Link>
-      </div>
     </nav>
   );
 }

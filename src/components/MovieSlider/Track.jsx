@@ -21,6 +21,8 @@ export default function Track({ movies, refs, dragHandlers }) {
       {movies.map((m) => (
         <div key={m.id} className="shrink-0 min-w-[200px]">
           <MovieCard
+            key={m.id}
+            id={m.id}
             title={m.title}
             rating={m.vote_average}
             poster={m.poster_path}

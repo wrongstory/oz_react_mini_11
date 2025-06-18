@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/Mainpage";
 import Layout from "./components/Nav/Layout";
-import MovieDetail from "./components/MovieDetail";
+import MovieDetailPage from "./pages/MovieDetailPage";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<MainPage />} />
-        <Route path="/details" element={<MovieDetail />} />
+        <Route path="details/:id" element={<MovieDetailPage />} />
       </Route>
     </Routes>
   );
