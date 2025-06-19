@@ -26,7 +26,7 @@ async function fetchFromTMDB(endurl) {
 
 export async function getMovieList() {
   const data = await fetchFromTMDB(`/movie/popular?language=${LANGUAGE}`);
-  return data.results;
+  return data.results.filter((movie) => !movie.adult);
 }
 
 export async function getMovieDetailById(id) {
