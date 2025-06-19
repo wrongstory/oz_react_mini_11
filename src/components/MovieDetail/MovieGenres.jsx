@@ -4,7 +4,7 @@ export default function MovieGenres({ genres }) {
       {genres.map((genre) => (
         <span
           key={genre.id}
-          className="bg-gray-700 text-sm px-3 py-1 rounded-full"
+          className="bg-indigo-700 text-white text-sm font-medium px-4 py-1 rounded-full shadow hover:bg-indigo-600 transition-colors"
         >
           {genre.name}
         </span>

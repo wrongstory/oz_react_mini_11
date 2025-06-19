@@ -1,9 +1,16 @@
 export default function MovieMeta({ vote, runtime, revenue }) {
   return (
-    <div className="text-sm text-gray-300 space-x-4">
-      <span>⭐ 평점: {vote.toFixed(1)}</span>
-      <span>⏱️ 상영시간: {runtime}분</span>
-      <span>💰 수익: ${revenue.toLocaleString()}</span>
+    <div className="flex flex-col md:flex-row md:items-center text-white text-base gap-2 md:gap-6 bg-gray-800 p-4 rounded-xl shadow-inner">
+      <span className="flex items-center gap-2">
+        ⭐ <strong className="font-semibold">평점:</strong> {vote.toFixed(1)}
+      </span>
+      <span className="flex items-center gap-2">
+        ⏱️ <strong className="font-semibold">상영시간:</strong> {runtime}분
+      </span>
+      <span className="flex items-center gap-2">
+        💰 <strong className="font-semibold">수익:</strong> $
+        {revenue.toLocaleString()}
+      </span>
     </div>
   );
 }
