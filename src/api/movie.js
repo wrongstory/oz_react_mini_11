@@ -1,5 +1,6 @@
 const API_URL = "https://api.themoviedb.org/3";
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
+const LANGUAGE = "ko-KR";
 
 const options = {
   method: "GET",
@@ -9,20 +10,25 @@ const options = {
   },
 };
 
-export async function getMovieList() {
-  const res = await fetch(`${API_URL}/movie/popular?language=ko-KR`, options);
-  if (!res.ok) {
-    throw new Error("API 호출 실패!!!!");
+// feat. fetch 함수 공통으로
+async function fetchFromTMDB(endurl) {
+  try {
+    const res = await fetch(`${API_URL}${endurl}`, options);
+    if (!res.ok) {
+      throw new Error(`TMDB API 호출 실패: ${res.status} ${res.statusText}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error("TMDB API 요청 중 오류:", error);
+    throw error;
   }
-  const data = await res.json();
+}
+
+export async function getMovieList() {
+  const data = await fetchFromTMDB(`/movie/popular?language=${LANGUAGE}`);
   return data.results;
 }
 
 export async function getMovieDetailById(id) {
-  const res = await fetch(`${API_URL}/movie/${id}?language=ko-KR`, options);
-  if (!res.ok) {
-    throw new Error("API 호출 실패!!!!");
-  }
-  const data = await res.json();
-  return data;
+  return await fetchFromTMDB(`/movie/${id}?language=${LANGUAGE}`);
 }
