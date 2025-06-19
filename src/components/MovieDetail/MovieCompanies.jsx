@@ -2,19 +2,26 @@ export default function MovieCompanies({ companies, imageBase }) {
   if (!companies || companies.length === 0) return null;
 
   return (
-    <div className="mt-6">
-      <h3 className="text-lg font-semibold">제작사</h3>
-      <div className="flex gap-4 items-center mt-2">
+    <div className="mt-8">
+      <h3 className="text-2xl font-bold text-black mb-4 border-b border-gray-600 pb-2">
+        제작사
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {companies.map((company) => (
-          <div key={company.id} className="flex items-center gap-2">
+          <div
+            key={company.id}
+            className="flex flex-col items-center justify-center bg-gray-800 px-5 py-4 rounded-lg shadow gap-2 h-full"
+          >
             {company.logo_path && (
               <img
                 src={`${imageBase}${company.logo_path}`}
                 alt={company.name}
-                className="h-6"
+                className="h-12 object-contain rounded bg-white p-1"
               />
             )}
-            <span>{company.name}</span>
+            <span className="text-sm text-white font-medium text-center">
+              {company.name}
+            </span>
           </div>
         ))}
       </div>
