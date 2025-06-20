@@ -59,7 +59,7 @@ export default function MainPage() {
           )
         ) : (
           <>
-            <MovieSlider />
+            <MovieSlider onShowTrailer={handleShowTrailer} />
             <MovieList onShowTrailer={handleShowTrailer} />{" "}
           </>
         )}

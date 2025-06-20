@@ -19,7 +19,7 @@ export default function MovieCard({
         if (key && onShowTrailer) {
           onShowTrailer(key);
         } else {
-          alert("❌ 이 영화는 예고편이 없습니다.");
+          alert("이 영화는 예고편이 없습니다.");
         }
       } catch (err) {
         console.error("트레일러 가져오기 실패", err);
@@ -34,7 +34,10 @@ export default function MovieCard({
 
   return (
     <div
-      onClick={() => navigate(`/details/${id}`, { replace: false })}
+      onClick={() => {
+        clearTimeout(hoverTimer.current);
+        navigate(`/details/${id}`, { replace: false });
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="w-60 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden m-4 hover:scale-105 transition-transform cursor-pointer"

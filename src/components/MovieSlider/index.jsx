@@ -4,7 +4,7 @@ import Track from "./Track";
 import ControlButtons from "./ControlButtons";
 import useMovieList from "../../hook/useMovieList";
 
-export default function MovieSlider() {
+export default function MovieSlider({ onShowTrailer }) {
   const containerRef = useRef(null);
   const cardWidth = 200;
   const [visibleCount, setVisibleCount] = useState(4);
@@ -49,6 +49,7 @@ export default function MovieSlider() {
       <Track
         movies={movies}
         refs={{ dragRef, containerRef }}
+        onShowTrailer={onShowTrailer}
         dragHandlers={{
           isDragging,
           onMouseDown,
