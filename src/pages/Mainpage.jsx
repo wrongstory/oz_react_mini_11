@@ -14,7 +14,7 @@ export default function MainPage() {
   const isSearching = searchTerm.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
+    <div className="min-h-screen pt-5 bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
       <div
         ref={ref}
         onMouseDown={onMouseDown}

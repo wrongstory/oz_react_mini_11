@@ -39,7 +39,9 @@ export default function MovieSlider() {
 
   return (
     <div className="relative w-full px-6">
-      <h2 className="text-xl font-bold mb-3 text-black">평점 높은 영화</h2>
+      <h2 className="text-xl font-bold mb-3 text-black dark:text-white">
+        평점 높은 영화
+      </h2>
       <ControlButtons
         onLeft={() => scrollBy(-cardWidth * visibleCount)}
         onRight={() => scrollBy(cardWidth * visibleCount)}

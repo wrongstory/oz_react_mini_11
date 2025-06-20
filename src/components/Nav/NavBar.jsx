@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearSearchTerm, setSearchTerm } from "../../redux/searchSlice";
+import useThemeMode from "../../hook/useThemeMode";
 
 export default function NavBar() {
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.term);
+
+  const { isDark, toggleTheme } = useThemeMode();
 
   const handleChange = (e) => {
     dispatch(setSearchTerm(e.target.value));
@@ -35,6 +38,12 @@ export default function NavBar() {
             초기화
           </button>
         )}
+        <button
+          onClick={toggleTheme}
+          className="text-white px-2 py-1 border border-white rounded hover:bg-gray-700"
+        >
+          {isDark ? "☀️ 모드" : "🌙 모드"}
+        </button>
       </div>
     </nav>
   );

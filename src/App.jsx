@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/Mainpage";
 import Layout from "./components/Nav/Layout";
 import MovieDetailPage from "./pages/MovieDetailPage";
-import SearchPage from "./pages/SearchPage";
 
 export default function App() {
   return (

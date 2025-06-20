@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-gray-100">
       <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <main className="p-4">
+      <main>
         <Outlet />
       </main>
     </div>
