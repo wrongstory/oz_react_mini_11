@@ -32,3 +32,10 @@ export async function getMovieList() {
 export async function getMovieDetailById(id) {
   return await fetchFromTMDB(`/movie/${id}?language=${LANGUAGE}`);
 }
+
+export async function searchMovieByQuery(query) {
+  const data = await fetchFromTMDB(
+    `/search/movie?query=${encodeURIComponent(query)}&language=${LANGUAGE}`
+  );
+  return data.results.filter((movie) => !movie.adult);
+}
