@@ -1,6 +1,6 @@
 import MovieCard from "../MovieCard";
 
-export default function Track({ movies, refs, dragHandlers }) {
+export default function Track({ movies, refs, dragHandlers, onShowTrailer }) {
   const { dragRef, containerRef } = refs;
   const { isDragging, onMouseDown, onMouseMove, onMouseUp, onMouseLeave } =
     dragHandlers;
@@ -26,6 +26,7 @@ export default function Track({ movies, refs, dragHandlers }) {
             title={m.title}
             rating={m.vote_average}
             poster={m.poster_path}
+            onShowTrailer={onShowTrailer}
           />
         </div>
       ))}
