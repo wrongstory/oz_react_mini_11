@@ -37,5 +37,6 @@ export async function searchMovieByQuery(query) {
   const data = await fetchFromTMDB(
     `/search/movie?query=${encodeURIComponent(query)}&language=${LANGUAGE}`
   );
+  console.log(data.results);
   return data.results.filter((movie) => !movie.adult);
 }

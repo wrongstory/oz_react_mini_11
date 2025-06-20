@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import useDebounce from "../../hook/useDebounce";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { setSearchTerm } from "../../redux/searchSlice";
 
 export default function NavBar() {
-  const [searchMovie, setSearchMovie] = useState("");
-  const debouncSearchTerm = useDebounce(searchMovie, 500);
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.search.term);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (e) => {
-    setSearchMovie(e.target.value);
-  };
-
-  useEffect(() => {
-    if (debouncSearchTerm) {
-      console.log("🔍 Debounced 검색어:", debouncSearchTerm);
+    dispatch(setSearchTerm(e.target.value));
+    console.log(e.target.value);
+    if (location.pathname !== "/search") {
+      navigate("/search");
     }
-  }, [debouncSearchTerm]);
+  };
 
   return (
     <nav className="bg-gray-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
@@ -24,9 +24,9 @@ export default function NavBar() {
       <input
         type="text"
         placeholder="영화 이름 입력.."
-        value={searchMovie}
+        value={searchTerm}
         onChange={handleChange}
-        className="text-black"
+        className="text-black px-2 py-1 rounded"
       />
     </nav>
   );
