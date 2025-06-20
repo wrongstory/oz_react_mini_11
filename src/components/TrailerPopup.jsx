@@ -6,7 +6,7 @@ export default function TrailerPopup({ trailerKey, onClose }) {
       <div className="relative w-full max-w-5xl aspect-video">
         <iframe
           className="w-full h-full rounded-xl"
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1`}
+          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0`}
           title="Trailer"
           allow="autoplay; encrypted-media"
         />

@@ -1,18 +1,21 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import MovieList from "../components/MovieList";
 import MovieSlider from "../components/MovieSlider";
 import useDragScrollY from "../hook/useDragScrollY";
 import useSearchMovieList from "../hook/useSearchMovieList";
 import MovieCard from "../components/MovieCard";
 import TrailerPopup from "../components/TrailerPopup";
+import { useSearchParams } from "react-router-dom";
 
 export default function MainPage() {
   const { ref, isDragging, onMouseDown, onMouseMove, onMouseUp, onMouseLeave } =
     useDragScrollY();
 
-  const searchTerm = useSelector((state) => state.search.term);
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("query") || "";
+
   const { movies: searchedMovies, loading } = useSearchMovieList(searchTerm);
+
   const isSearching = searchTerm.trim().length > 0;
 
   // 예고편 상태
