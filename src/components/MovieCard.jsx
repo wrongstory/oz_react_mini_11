@@ -1,29 +1,35 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMovieTrailer } from "../api/movie";
-import TrailerPopup from "./TrailerPopup";
 
-export default function MovieCard({ id, title, rating, poster }) {
+export default function MovieCard({
+  id,
+  title,
+  rating,
+  poster,
+  onShowTrailer,
+}) {
   const navigate = useNavigate();
-  const [trailerKey, setTrailerKey] = useState(null);
-  const [showTrailer, setShowTrailer] = useState(false);
   const hoverTimer = useRef(null);
 
   const handleMouseEnter = () => {
     hoverTimer.current = setTimeout(async () => {
       try {
         const key = await getMovieTrailer(id);
-        setTrailerKey(key);
-        setShowTrailer(true);
+        if (key && onShowTrailer) {
+          onShowTrailer(key);
+        } else {
+          alert("❌ 이 영화는 예고편이 없습니다.");
+        }
       } catch (err) {
         console.error("트레일러 가져오기 실패", err);
       }
-    }, 3000); // 5초 뒤 실행
+      console.log("호버링 완료");
+    }, 2000); // 2초 후 호버링 완료 문제없음
   };
 
   const handleMouseLeave = () => {
     clearTimeout(hoverTimer.current);
-    setShowTrailer(false);
   };
 
   return (
@@ -47,7 +53,6 @@ export default function MovieCard({ id, title, rating, poster }) {
           ⭐ 평점: {rating.toFixed(1)}
         </p>
       </div>
-      {showTrailer && <TrailerPopup trailerKey={trailerKey} />}
     </div>
   );
 }

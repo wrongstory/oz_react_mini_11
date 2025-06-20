@@ -1,17 +1,28 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import MovieList from "../components/MovieList";
 import MovieSlider from "../components/MovieSlider";
 import useDragScrollY from "../hook/useDragScrollY";
 import useSearchMovieList from "../hook/useSearchMovieList";
 import MovieCard from "../components/MovieCard";
+import TrailerPopup from "../components/TrailerPopup";
 
 export default function MainPage() {
   const { ref, isDragging, onMouseDown, onMouseMove, onMouseUp, onMouseLeave } =
     useDragScrollY();
+
   const searchTerm = useSelector((state) => state.search.term);
   const { movies: searchedMovies, loading } = useSearchMovieList(searchTerm);
-
   const isSearching = searchTerm.trim().length > 0;
+
+  // 예고편 상태
+  const [selectedTrailerKey, setSelectedTrailerKey] = useState(null);
+  const [showTrailerPopup, setShowTrailerPopup] = useState(false);
+
+  const handleShowTrailer = (key) => {
+    setSelectedTrailerKey(key);
+    setShowTrailerPopup(true);
+  };
 
   return (
     <div className="min-h-screen pt-5 bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
@@ -39,6 +50,7 @@ export default function MainPage() {
                   title={movie.title}
                   rating={movie.vote_average}
                   poster={movie.poster_path}
+                  onShowTrailer={handleShowTrailer}
                 />
               ))}
             </div>
@@ -48,10 +60,17 @@ export default function MainPage() {
         ) : (
           <>
             <MovieSlider />
-            <MovieList />
+            <MovieList onShowTrailer={handleShowTrailer} />{" "}
           </>
         )}
       </div>
+
+      {showTrailerPopup && (
+        <TrailerPopup
+          trailerKey={selectedTrailerKey}
+          onClose={() => setShowTrailerPopup(false)}
+        />
+      )}
     </div>
   );
 }

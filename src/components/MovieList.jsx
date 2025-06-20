@@ -1,7 +1,7 @@
 import MovieCard from "./MovieCard";
 import useMovieList from "../hook/useMovieList";
 
-export default function MovieList() {
+export default function MovieList({ onShowTrailer }) {
   const { movies, loading } = useMovieList();
 
   if (loading) {
@@ -19,6 +19,7 @@ export default function MovieList() {
           title={movie.title}
           rating={movie.vote_average}
           poster={movie.poster_path}
+          onShowTrailer={onShowTrailer}
         />
       ))}
     </div>
