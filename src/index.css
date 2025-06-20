@@ -4,6 +4,8 @@
 
 html,
 body {
+  height: 100%;
+  overflow-y: auto;
   @apply bg-white text-black dark:bg-black dark:text-white;
   @apply min-h-screen;
 }

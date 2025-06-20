@@ -1,14 +1,15 @@
 import MovieCard from "./MovieCard";
 import useMovieList from "../hook/useMovieList";
+import useInfiniteObserver from "../hook/useInfiniteObserver";
 
 export default function MovieList({ onShowTrailer }) {
-  const { movies, loading } = useMovieList();
+  const { movies, loading, loadMore, hasMore } = useMovieList();
 
-  if (loading) {
-    return (
-      <p className="text-white text-center mt-10">영화 목록 불러오는 중...</p>
-    );
-  }
+  const observerRef = useInfiniteObserver(() => {
+    if (!loading && hasMore) {
+      loadMore();
+    }
+  }, loading);
 
   return (
     <div className="flex flex-wrap justify-center">
@@ -22,6 +23,22 @@ export default function MovieList({ onShowTrailer }) {
           onShowTrailer={onShowTrailer}
         />
       ))}
+
+      {/* 로딩 시 스피너 UI */}
+      {loading && (
+        <div className="w-full flex justify-center py-6">
+          <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent" />
+        </div>
+      )}
+
+      {/* 무한스크롤 감지용 (보이지 않게) */}
+      {hasMore && (
+        <div
+          ref={observerRef}
+          className="h-1 w-full"
+          style={{ visibility: "hidden" }}
+        />
+      )}
     </div>
   );
 }
