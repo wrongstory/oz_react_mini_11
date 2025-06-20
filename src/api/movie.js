@@ -40,3 +40,11 @@ export async function searchMovieByQuery(query) {
   console.log(data.results);
   return data.results.filter((movie) => !movie.adult);
 }
+
+export async function getMovieTrailer(id) {
+  const data = await fetchFromTMDB(`/movie/${id}/videos?language=${LANGUAGE}`);
+  const trailers = data.results.filter(
+    (v) => v.type === "Trailer" && v.site === "YouTube"
+  );
+  return trailers.length > 0 ? trailers[0].key : null;
+}
