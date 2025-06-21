@@ -1,19 +1,18 @@
 import { Link, useSearchParams } from "react-router-dom";
 import useThemeMode from "../../hook/useThemeMode";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../../context/useAuth";
 
 export default function NavBar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isDark, toggleTheme } = useThemeMode();
+  const { isLoggedIn, user, logout } = useAuth();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const queryParam = searchParams.get("query") || "";
   const [inputValue, setInputValue] = useState(queryParam);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 여부
-  const [userThumbnail, setUserThumbnail] = useState("/default-user.jpg"); // 썸네일 URL
 
   useEffect(() => {
     setInputValue(queryParam);
@@ -46,11 +45,6 @@ export default function NavBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // 추가로 로그아웃 로직 실행
-  };
-
   return (
     <>
       {/* 메인타이틀 (로고로 수정예정) */}
@@ -80,12 +74,12 @@ export default function NavBar() {
           )}
         </div>
 
-        {/* 로그인/회원가입 드롭다운 트리거 */}
+        {/* 로그인/회원가입 or 유저 드롭다운 */}
         <div className="flex items-center gap-4">
           <div className="relative" ref={dropdownRef}>
             {isLoggedIn ? (
               <img
-                src={userThumbnail}
+                src={user?.thumbnail || "/default-user.jpg"} // ✅ user에서 썸네일 사용
                 alt="User"
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
                 className="w-10 h-10 rounded-full cursor-pointer border border-white"
@@ -111,7 +105,10 @@ export default function NavBar() {
                       마이페이지
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        logout(); // ✅ context에서 logout 호출
+                        setIsDropdownOpen(false);
+                      }}
                       className="block w-full text-left px-4 py-2 hover:bg-gray-200"
                     >
                       로그아웃
@@ -139,6 +136,8 @@ export default function NavBar() {
             )}
           </div>
         </div>
+
+        {/** 테마 버튼 */}
         <div className="flex items-center gap-4 border-l border-white pl-4 ml-2">
           <button
             onClick={toggleTheme}
