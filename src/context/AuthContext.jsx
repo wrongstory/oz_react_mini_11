@@ -22,18 +22,15 @@ function authReducer(state, action) {
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  /* ① 첫 로딩 때 세션 확인 */
+  // 첫 로딩 시 세션 확인
   useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data: { session } }) => {
-        if (session?.user) dispatch({ type: "LOGIN", payload: session.user });
-      })
-      .finally(() => {
-        /* 필요하면 로딩 상태 추가 가능 */
-      });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        dispatch({ type: "LOGIN", payload: session.user });
+      }
+    });
 
-    /* ② 로그인·로그아웃 실시간 반영 */
+    // 세션 변화 감지 (로그인/로그아웃 실시간 반영)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -47,14 +44,20 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  /* ③ 액션 래퍼 – Supabase 호출 + 리듀서 디스패치 */
+  // Supabase 이메일/비밀번호 로그인
   const login = async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) throw error;
+
     dispatch({ type: "LOGIN", payload: data.user });
+  };
+
+  // 소셜 로그인 (카카오 등)
+  const loginWithOAuthUser = (userData) => {
+    dispatch({ type: "LOGIN", payload: userData });
   };
 
   const logout = async () => {
@@ -63,7 +66,15 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: state.isLoggedIn,
+        user: state.user,
+        login,
+        loginWithOAuthUser, // 추가
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

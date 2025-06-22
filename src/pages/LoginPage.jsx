@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../context/AuthContext";
+import KakaoLoginButton from "../components/KakaoLoginButton";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -81,10 +82,16 @@ export default function LoginPage() {
           >
             로그인
           </button>
+
           {errorMsg && (
             <p className="text-red-500 mt-2 text-center">{errorMsg}</p>
           )}
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="mb-2 text-gray-700 dark:text-gray-300">또는</p>
+          <KakaoLoginButton />
+        </div>
       </div>
     </div>
   );
