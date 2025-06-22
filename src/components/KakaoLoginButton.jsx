@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const KAKAO_JAVASCRIPT_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
 export default function KakaoLoginButton() {
   const { loginWithOAuthUser } = useAuth();
   const [isKakaoReady, setIsKakaoReady] = useState(false);
+  const navigate = useNavigate();
 
   // SDK 로딩 감지 및 초기화
   useEffect(() => {
@@ -40,8 +42,9 @@ export default function KakaoLoginButton() {
               name: res.kakao_account.profile.nickname,
               thumbnail: res.kakao_account.profile.profile_image_url,
             };
-
+            console.log("카카오 로그인 성공:", userData);
             loginWithOAuthUser(userData);
+            navigate("/");
           },
           fail(err) {
             console.error("카카오 사용자 정보 요청 실패", err);

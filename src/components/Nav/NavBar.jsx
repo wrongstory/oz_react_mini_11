@@ -51,7 +51,7 @@ export default function NavBar() {
       <nav className="bg-gray-800 text-white px-6 py-4 flex items-center shadow-md">
         <div className="flex-shrink-0">
           <Link to="/" className="text-xl font-bold hover:text-yellow-400">
-            L's Movie
+            L's MovieTime
           </Link>
         </div>
 
@@ -79,10 +79,14 @@ export default function NavBar() {
           <div className="relative" ref={dropdownRef}>
             {isLoggedIn ? (
               <img
-                src={user?.thumbnail || "/default-user.jpg"} // ✅ user에서 썸네일 사용
-                alt="User"
+                src={
+                  user.provider === "kakao"
+                    ? user.thumbnail
+                    : user.user_metadata.avatar_url // 구글
+                }
+                alt={user.user_metadata.name}
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className="w-10 h-10 rounded-full cursor-pointer border border-white"
+                className="w-10 h-10 rounded-full cursor-pointer "
               />
             ) : (
               <button
@@ -106,7 +110,7 @@ export default function NavBar() {
                     </Link>
                     <button
                       onClick={() => {
-                        logout(); // ✅ context에서 logout 호출
+                        logout(); // context에서 logout 호출
                         setIsDropdownOpen(false);
                       }}
                       className="block w-full text-left px-4 py-2 hover:bg-gray-200"

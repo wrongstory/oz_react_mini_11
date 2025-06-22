@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../context/AuthContext";
 import KakaoLoginButton from "../components/KakaoLoginButton";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -91,6 +92,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <p className="mb-2 text-gray-700 dark:text-gray-300">또는</p>
           <KakaoLoginButton />
+          <GoogleLoginButton />
         </div>
       </div>
     </div>
