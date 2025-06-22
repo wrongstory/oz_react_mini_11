@@ -14,6 +14,19 @@ export default function NavBar() {
   const queryParam = searchParams.get("query") || "";
   const [inputValue, setInputValue] = useState(queryParam);
 
+  const getAvatar = () => {
+    if (user.provider === "kakao") {
+      return user.thumbnail; // Kakao 이미지
+    }
+
+    if (user.user_metadata?.avatar_url) {
+      return user.user_metadata.avatar_url; // Google 이미지
+    }
+
+    // 이메일/비밀번호 로그인 → 기본 이미지
+    return "/default-profile.png";
+  };
+
   useEffect(() => {
     setInputValue(queryParam);
   }, [queryParam]);
@@ -79,14 +92,10 @@ export default function NavBar() {
           <div className="relative" ref={dropdownRef}>
             {isLoggedIn ? (
               <img
-                src={
-                  user.provider === "kakao"
-                    ? user.thumbnail
-                    : user.user_metadata.avatar_url // 구글
-                }
-                alt={user.user_metadata.name}
+                src={getAvatar()}
+                alt={user.user_metadata?.name || "사용자"}
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className="w-10 h-10 rounded-full cursor-pointer "
+                className="w-10 h-10 rounded-full cursor-pointer"
               />
             ) : (
               <button

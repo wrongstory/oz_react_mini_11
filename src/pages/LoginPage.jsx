@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  const { login } = useContext(AuthContext); // ✅ context login 사용
+  const { login } = useContext(AuthContext); // context login 사용
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,7 @@ export default function LoginPage() {
     if (!validate()) return;
 
     try {
-      await login(form); // ✅ context login 호출
+      await login(form); // context login 호출
       navigate("/"); // 로그인 성공 후 이동
     } catch (err) {
       setErrorMsg("로그인 실패: " + err.message);
