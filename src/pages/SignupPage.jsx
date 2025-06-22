@@ -1,5 +1,6 @@
 import { useState } from "react";
 import FormInput from "../components/FormInput";
+import { supabase } from "../api/supabaseClient";
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -10,6 +11,7 @@ export default function SignupPage() {
   });
 
   const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,12 +55,29 @@ export default function SignupPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     console.log("회원가입 정보:", form);
     // 실제 API 연동 처리
+
+    const { email, password } = form;
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      if (error.message.includes("duplicate key")) {
+        setErrors({ email: "이미 가입된 이메일입니다." });
+      } else {
+        alert("회원가입 실패: " + error.message);
+      }
+      return;
+    }
+
+    setSuccess("가입 성공! 이메일을 확인하세요.");
   };
 
   return (
@@ -109,6 +128,9 @@ export default function SignupPage() {
           >
             회원가입
           </button>
+          {success && (
+            <p className="text-green-500 mt-2 text-center">{success}</p>
+          )}
         </form>
       </div>
     </div>

@@ -1,9 +1,13 @@
 import { useState } from "react";
 import FormInput from "../components/FormInput";
+import { supabase } from "../api/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,12 +38,25 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     console.log("로그인 정보:", form);
     // 로그인 API 호출 예정
+    const { email, password } = form;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setErrorMsg("로그인 실패: " + error.message);
+    } else {
+      console.log("로그인 성공:", data);
+      // 토큰이 자동 저장됨 (session 자동 관리)
+      navigate("/"); // 홈 페이지 등으로 이동
+    }
   };
 
   return (
@@ -73,6 +90,9 @@ export default function LoginPage() {
           >
             로그인
           </button>
+          {errorMsg && (
+            <p className="text-red-500 mt-2 text-center">{errorMsg}</p>
+          )}
         </form>
       </div>
     </div>
