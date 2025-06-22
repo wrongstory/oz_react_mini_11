@@ -1,13 +1,15 @@
-import { useState } from "react";
-import FormInput from "../components/FormInput";
-import { supabase } from "../api/supabaseClient";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import FormInput from "../components/FormInput";
+import { AuthContext } from "../context/AuthContext";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
+
+  const { login } = useContext(AuthContext); // ✅ context login 사용
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,7 +19,6 @@ export default function LoginPage() {
   const validate = () => {
     const newErrors = {};
 
-    // 이메일 형식 확인
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email.trim()) {
       newErrors.email = "이메일을 입력하세요.";
@@ -25,7 +26,6 @@ export default function LoginPage() {
       newErrors.email = "유효한 이메일 형식이 아닙니다.";
     }
 
-    // 비밀번호: 영문 대소문자 + 숫자 포함, 8자 이상
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!form.password) {
       newErrors.password = "비밀번호를 입력하세요.";
@@ -42,20 +42,11 @@ export default function LoginPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    console.log("로그인 정보:", form);
-    // 로그인 API 호출 예정
-    const { email, password } = form;
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMsg("로그인 실패: " + error.message);
-    } else {
-      console.log("로그인 성공:", data);
-      // 토큰이 자동 저장됨 (session 자동 관리)
-      navigate("/"); // 홈 페이지 등으로 이동
+    try {
+      await login(form); // ✅ context login 호출
+      navigate("/"); // 로그인 성공 후 이동
+    } catch (err) {
+      setErrorMsg("로그인 실패: " + err.message);
     }
   };
 
