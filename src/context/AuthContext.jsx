@@ -1,7 +1,6 @@
-import { createContext, useReducer, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import { supabase } from "../api/supabaseClient";
-
-export const AuthContext = createContext();
+import { AuthContext } from "./AuthContext";
 
 const initialState = {
   isLoggedIn: false,
@@ -21,9 +20,11 @@ function authReducer(state, action) {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
-  // 페이지 로딩 시 기존 세션 불러오기
+  // 앱 첫 로딩 시 기존 세션 확인
   useEffect(() => {
+    const code = new URL(window.location.href).searchParams.get("code");
+    if (code) return; // AuthCallback에서 처리
+
     supabase.auth
       .getSession()
       .then(({ data: { session } }) => {
@@ -35,7 +36,6 @@ export function AuthProvider({ children }) {
       .catch((err) => console.error("세션 확인 오류:", err));
   }, []);
 
-  // 로그인/로그아웃 실시간 반영 (구글 등 OAuth 포함)
   useEffect(() => {
     const {
       data: { subscription },
@@ -51,7 +51,6 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  // 이메일/비밀번호 로그인
   const login = async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -61,13 +60,11 @@ export function AuthProvider({ children }) {
     dispatch({ type: "LOGIN", payload: data.user });
   };
 
-  // 로그아웃
   const logout = async () => {
     await supabase.auth.signOut();
     dispatch({ type: "LOGOUT" });
   };
 
-  // 소셜 로그인 사용자 수동 추가 처리 시 (Kakao)
   const loginWithOAuthUser = (userData) => {
     dispatch({ type: "LOGIN", payload: { user_metadata: userData } });
   };

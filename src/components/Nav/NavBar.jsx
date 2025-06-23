@@ -107,7 +107,7 @@ export default function NavBar() {
             )}
 
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-md w-32 z-10">
+              <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-md w-32 z-50">
                 {isLoggedIn ? (
                   <>
                     <Link

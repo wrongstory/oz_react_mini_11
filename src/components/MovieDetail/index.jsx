@@ -5,18 +5,57 @@ import MovieGenres from "./MovieGenres";
 import MovieOverview from "./MovieOverview";
 import MovieCompanies from "./MovieCompanies";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../context/useAuth";
+import {
+  isInWishlist,
+  addToWishlist,
+  removeFromWishlist,
+} from "../../api/withlist";
 
 export default function MovieDetail() {
   const movie = useSelector((state) => state.movie.selectedMovie);
+  const { user } = useAuth();
+  const [liked, setLiked] = useState(false);
 
   const imageBase = "https://image.tmdb.org/t/p/original";
   const backdrop = `${imageBase}${movie.backdrop_path}`;
   const poster = `${imageBase}${movie.poster_path}`;
 
+  useEffect(() => {
+    if (user && movie?.id) {
+      isInWishlist(user.id, movie.id).then(setLiked);
+    }
+  }, [user, movie?.id]);
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    if (liked) {
+      await removeFromWishlist(user.id, movie.id);
+      setLiked(false);
+    } else {
+      await addToWishlist(user.id, {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        vote_average: movie.vote_average,
+      });
+      setLiked(true);
+    }
+  };
   return (
     <div className="relative bg-gray-200 text-black dark:bg-gray-900 dark:text-white min-h-screen">
-      <div className="absolute top-0 left-0 w-full h-[400px] z-0">
-        <MovieBackdrop backdrop={backdrop} title={movie.title} />
+      <div className="absolute top-0 left-0 w-full h-[400px] z-20">
+        <MovieBackdrop
+          backdrop={backdrop}
+          title={movie.title}
+          liked={liked}
+          onToggleWishlist={handleWishlistToggle}
+        />
       </div>
 
       <div className="relative z-10 pt-[420px] pb-20 px-4">
@@ -28,6 +67,7 @@ export default function MovieDetail() {
                 "{movie.tagline}"
               </p>
             )}
+
             <MovieMeta
               vote={movie.vote_average}
               runtime={movie.runtime}

@@ -5,6 +5,8 @@ import MovieDetailPage from "./pages/MovieDetailPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import AuthCallback from "./pages/AuthCallbackPage";
+import MyPage from "./pages/MyPage";
+import RequireAuth from "./components/RequireAuth";
 
 export default function App() {
   return (
@@ -14,6 +16,14 @@ export default function App() {
         <Route path="details/:id" element={<MovieDetailPage />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route
+          path="mypage"
+          element={
+            <RequireAuth>
+              <MyPage />
+            </RequireAuth>
+          }
+        />
         <Route path="/auth/callback" element={<AuthCallback />} />
       </Route>
     </Routes>
