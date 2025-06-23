@@ -20,7 +20,6 @@ function authReducer(state, action) {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-
   // 앱 첫 로딩 시 기존 세션 확인
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");

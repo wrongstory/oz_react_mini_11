@@ -8,15 +8,8 @@ export default function GoogleLoginButton() {
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: "http://localhost:5173/auth/callback",
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
-      },
     });
-    if (data) alert("구글 로그인 성공!");
+    if (data) console.log("구글 로그인 성공!");
     if (error) {
       console.error("구글 로그인 실패:", error.message);
     }
