@@ -67,7 +67,9 @@ export default function SignupPage() {
       email,
       password,
     });
-
+    if (data) {
+      alert("성공");
+    }
     if (error) {
       if (error.message.includes("duplicate key")) {
         setErrors({ email: "이미 가입된 이메일입니다." });

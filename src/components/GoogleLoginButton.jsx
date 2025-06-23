@@ -1,37 +1,26 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../api/supabaseClient";
 
 export default function GoogleLoginButton() {
-  const navigate = useNavigate();
-
   const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    // 기존 세션 및 localStorage 강제 초기화
+    await supabase.auth.signOut();
+    localStorage.clear();
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:5173/auth/callback", // 정확하게 일치
+        redirectTo: "http://localhost:5173/auth/callback",
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
       },
     });
-
+    if (data) alert("구글 로그인 성공!");
     if (error) {
       console.error("구글 로그인 실패:", error.message);
     }
   };
-
-  useEffect(() => {
-    // 로그인 상태 변경 감지
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("Auth 이벤트:", event);
-        console.log("세션 정보:", session);
-        if (session) {
-          navigate("/");
-        }
-      }
-    );
-
-    return () => listener.subscription.unsubscribe();
-  }, []);
 
   return (
     <button

@@ -1,31 +1,34 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../api/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
-      // Supabase가 자동으로 URL의 토큰 처리 (hash 처리)
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get("code");
+    console.log("code 파라미터:", code);
 
-      console.log("AuthCallback 세션:", session);
-      console.log("유저 메타데이터:", session?.user?.user_metadata);
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+        if (error) {
+          console.error("세션 교환 실패:", error);
+        } else {
+          console.log("세션 교환 성공:", data.session);
 
-      if (session?.user) {
-        navigate("/"); // 로그인 성공
-      } else {
-        console.error("세션 없음 or 실패:", error);
-        navigate("/login"); // 로그인 실패 시
-      }
-    };
+          // URL에서 ?code= 제거
+          url.searchParams.delete("code");
+          window.history.replaceState({}, document.title, url.pathname);
 
-    checkSession();
-  }, []);
+          // 메인으로 이동
+          navigate("/");
+        }
+      });
+    } else {
+      console.warn("⚠️ code 없음. 리디렉션 실패 또는 URL 설정 오류");
+    }
+  }, [navigate]);
 
   return <p className="text-white text-center mt-10">로그인 처리 중...</p>;
 }
