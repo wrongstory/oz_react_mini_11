@@ -8,6 +8,9 @@ export default function GoogleLoginButton() {
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: "https://oz-react-mini-11-omega.vercel.app", // 배포 도메인 명시
+      },
     });
     if (data) console.log("구글 로그인 성공!");
     if (error) {
