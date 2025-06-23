@@ -1,39 +1,45 @@
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { User, Star } from "lucide-react";
-
+import { fetchWishlist, removeFromWishlist } from "../api/withlist";
+import { X } from "lucide-react";
 // 더미 위시리스트 예시 데이터
-const wishlist = [
-  {
-    title: "앱솔루션",
-    rating: 6.005,
-    poster: "https://image.tmdb.org/t/p/w500/yourImage1.jpg",
-  },
-  {
-    title: "데드풀과 울버린",
-    rating: 7.679,
-    poster: "https://image.tmdb.org/t/p/w500/yourImage2.jpg",
-  },
-  {
-    title: "Armor",
-    rating: 5.5,
-    poster: "https://image.tmdb.org/t/p/w500/yourImage3.jpg",
-  },
-  {
-    title: "베놈: 라스트 댄스",
-    rating: 6.4,
-    poster: "https://image.tmdb.org/t/p/w500/yourImage4.jpg",
-  },
-];
 
 export default function MyPage() {
   const { user } = useAuth();
+  const [wishlist, setWishlist] = useState([]);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("회원정보");
+
   const profileImage =
     user.user_metadata?.avatar_url || user.user_metadata?.picture;
 
+  // 위시리스트 불러오기
+  useEffect(() => {
+    if (user) {
+      fetchWishlist(user.id).then(({ data }) => {
+        console.log("가져온 위시리스트 데이터:", data);
+        setWishlist(data || []);
+      });
+    }
+  }, [user]);
+
+  // 위시리스트 제거
+  const handleRemove = async (movieId) => {
+    const confirmed = window.confirm("정말로 위시리스트에서 제거하시겠습니까?");
+    if (!confirmed) return;
+
+    const { error } = await removeFromWishlist(user.id, Number(movieId));
+    if (!error) {
+      setWishlist((prev) =>
+        prev.filter((movie) => Number(movie.movie_id) !== Number(movieId))
+      );
+    } else {
+      alert("삭제에 실패했습니다.");
+    }
+  };
+
+  // 로그인 안됐으면 홈으로 리디렉션
   useEffect(() => {
     if (!user) navigate("/");
   }, [user, navigate]);
@@ -61,18 +67,18 @@ export default function MyPage() {
         <div className="text-lg font-bold mb-6">
           {user.user_metadata?.full_name || "사용자"} 님
         </div>
+
         <nav className="w-full space-y-4">
           {["회원정보", "위시리스트"].map((label) => (
             <div
               key={label}
-              onClick={() => setActiveTab(label)} // 탭 전환
+              onClick={() => setActiveTab(label)}
               className={`flex justify-between items-center px-4 py-2 cursor-pointer rounded 
-        ${
-          activeTab === label
-            ? "bg-gray-200 dark:bg-gray-700 font-semibold"
-            : "hover:bg-gray-100 dark:hover:bg-gray-800"
-        }
-      `}
+              ${
+                activeTab === label
+                  ? "bg-gray-200 dark:bg-gray-700 font-semibold"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
             >
               <span>{label}</span>
               <span className="text-gray-500 dark:text-gray-400">{">"}</span>
@@ -97,7 +103,6 @@ export default function MyPage() {
               <p>
                 <strong>이메일:</strong> {user.email}
               </p>
-              {/* 필요 시 닉네임 수정폼 추가 가능 */}
             </div>
           </>
         )}
@@ -105,31 +110,43 @@ export default function MyPage() {
         {activeTab === "위시리스트" && (
           <>
             <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
-              WISHLIST
+              위시리스트
             </h2>
             <hr className="border-gray-300 dark:border-gray-600 mb-8" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {wishlist.map((movie, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white dark:bg-gray-700 p-3 rounded-xl shadow-lg hover:scale-105 transition transform duration-200"
-                >
-                  <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    className="w-full h-64 object-cover rounded-lg mb-3"
-                  />
-                  <div className="font-semibold text-gray-800 dark:text-white">
-                    {movie.title}
+            {wishlist.length === 0 ? (
+              <p className="text-gray-500 dark:text-gray-400">
+                위시리스트가 비어 있습니다.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                {wishlist.map((movie) => (
+                  <div
+                    key={movie.movie_id}
+                    className="relative bg-white dark:bg-gray-700 p-3 rounded-xl shadow-lg"
+                  >
+                    <button
+                      onClick={() => handleRemove(movie.movie_id)}
+                      className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition"
+                    >
+                      <X size={20} />
+                    </button>
+
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt={movie.title}
+                      className="w-full h-64 object-cover rounded-lg mb-3"
+                    />
+                    <div className="font-semibold text-gray-800 dark:text-white">
+                      {movie.title}
+                    </div>
+                    <div className="text-yellow-500 text-sm mt-1">
+                      ⭐ {movie.vote_average?.toFixed(1)}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
-                    <Star size={16} fill="currentColor" />
-                    <span>{movie.rating}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </main>
