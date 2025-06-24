@@ -25,7 +25,7 @@ export default function AuthCallback() {
         navigate("/", { replace: true });
       });
     } else {
-      console.warn("⚠️ code 파라미터 없음. 이미 처리되었거나 URL 오류");
+      console.warn("code 파라미터 없음. 이미 처리되었거나 URL 오류");
     }
   }, [navigate]);
 
