@@ -5,7 +5,7 @@ export default function KakaoLoginButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
-        redirectTo: window.location.origin, // 배포 도메인 명시
+        redirectTo: `${window.location.origin}/auth/callback`, // 배포 도메인 명시
       },
     });
 

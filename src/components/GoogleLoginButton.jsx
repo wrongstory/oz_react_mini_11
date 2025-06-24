@@ -9,7 +9,7 @@ export default function GoogleLoginButton() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin, // 배포 도메인 명시
+        redirectTo: `${window.location.origin}/auth/callback`, // 배포 도메인 명시
       },
     });
     if (data) console.log("구글 로그인 성공!");
