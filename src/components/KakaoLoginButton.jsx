@@ -5,7 +5,7 @@ export default function KakaoLoginButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
-        redirectTo: "https://oz-react-mini-11-omega.vercel.app", // 배포 도메인 명시
+        redirectTo: window.location.origin, // 배포 도메인 명시
       },
     });
 

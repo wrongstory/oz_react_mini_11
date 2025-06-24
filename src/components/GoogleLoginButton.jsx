@@ -3,13 +3,13 @@ import { supabase } from "../api/supabaseClient";
 export default function GoogleLoginButton() {
   const handleGoogleLogin = async () => {
     // 기존 세션 및 localStorage 강제 초기화
-    await supabase.auth.signOut();
-    localStorage.clear();
+    //await supabase.auth.signOut();
+    //localStorage.clear();
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://oz-react-mini-11-omega.vercel.app", // 배포 도메인 명시
+        redirectTo: window.location.origin, // 배포 도메인 명시
       },
     });
     if (data) console.log("구글 로그인 성공!");
